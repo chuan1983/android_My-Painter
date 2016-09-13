@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         myView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("brad","setonClick")
+                Log.d("brad","setonClick");
             }
         });
     }
