@@ -53,10 +53,18 @@ public class MyView extends View {
         return true;
     }
     private void doTouchDown(float x, float y){
-
+        HashMap<String,Float> point =
+                new HashMap<>();
+        point.put("x",x); point.put("y",y);
+        line.add(point);
+        invalidate();
     }
     private void doTouchMove(float x, float y){
-
+        HashMap<String,Float> point =
+                new HashMap<>();
+        point.put("x",x); point.put("y",y);
+        line.add(point);
+        invalidate();
     }
 //    @Override
 //    public void setOnClickListener(OnClickListener l) {
