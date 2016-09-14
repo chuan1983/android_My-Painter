@@ -23,6 +23,8 @@ import java.util.ResourceBundle;
 public class MyView extends View {
     private LinkedList<LinkedList<HashMap<String,Float>>> lines;  //這邊是製作一條線   ,之後改多條
     private Resources res;
+    private boolean isInit;   //這邊基本型別是flase
+    private int viewW,viewH;
 
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -31,9 +33,16 @@ public class MyView extends View {
 //    setOnClickListener(new MyClick());
     }
 
+    private void init(){
+        viewW = getWidth();  viewH = getHeight();
+        isInit = true;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if(!isInit)init();
 
         Bitmap bmpBall = BitmapFactory.decodeResource(res,R.drawable.ball);         //抓球的圖  0,0的位置
         canvas.drawBitmap(bmpBall,0,0,null);
