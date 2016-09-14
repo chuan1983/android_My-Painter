@@ -30,7 +30,10 @@ public class MyView extends View {
         Paint p = new Paint();
         p.setColor(Color.BLUE);
         p.setStrokeWidth(4);
-        canvas.drawLine(0,0,100,100,p);
+        for (int i=1; i<line.size(); i++){
+            canvas.drawLine(line.get(i-1).get("x"),line.get(i-1).get("y"),
+                    line.get(i).get("x"),line.get(i).get("y"),p);
+        }
     }
 //    private class MyClick implements View.OnClickListener{
 //        @Override
@@ -53,7 +56,7 @@ public class MyView extends View {
         return true;
     }
     private void doTouchDown(float x, float y){
-        HashMap<String,Float> point =
+        HashMap<String,Float> point =                //收集點的動作
                 new HashMap<>();
         point.put("x",x); point.put("y",y);
         line.add(point);
