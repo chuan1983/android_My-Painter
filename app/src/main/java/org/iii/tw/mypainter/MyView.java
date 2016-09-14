@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.View;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
 
 /**
  * Created by user on 2016/9/13.
@@ -45,6 +47,11 @@ public class MyView extends View {
         if(!isInit)init();
 
         Bitmap bmpBall = BitmapFactory.decodeResource(res,R.drawable.ball);         //抓球的圖  0,0的位置
+
+        float ballW = viewW/8f ,ballH = viewH;
+        Matrix matrix = new Matrix();          //圖等比例的動作
+        matrix.postScale(ballW/bmpBall.getWidth(), ballH/bmpBall.getHeight());              //新值= 原值*sx  所以sx=新/原
+        bmpBall = Bitmap.createBitmap(bmpBall,0,0,bmpBall.getWidth(),bmpBall.getHeight(),matrix,false);    //抓取整張圖的從00到最後
         canvas.drawBitmap(bmpBall,0,0,null);
 
 
