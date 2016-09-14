@@ -35,7 +35,7 @@ public class MyView extends View {
     private Matrix matrix;
     private Timer timer;
     private float ballX, ballY, ballW, ballH, dx, dy;
-    private GestureDetector gd;
+    private GestureDetector gd;   //建立手指 觸碰和滑動
 
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,13 +48,14 @@ public class MyView extends View {
     }
 
     private class MyGDListener extends GestureDetector.SimpleOnGestureListener{
+        //觸碰
         @Override
         public boolean onDown(MotionEvent e) {
 //            Log.d("brad","onDown");
 //            return super.onDown(e);
             return true;
         }
-
+        //滑動
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             Log.d("brad","onFling:"+ velocityX + "x" + velocityY);
@@ -62,18 +63,24 @@ public class MyView extends View {
         }
     }
 
-    Timer getTimer(){return timer;}     //控制MyView週期生命
+    //控制MyView週期生命
+    Timer getTimer(){return timer;}
 
     private void init(){
-        viewW = getWidth();  viewH = getHeight();        //取得view得寬高
+        //取得view得寬高
+        viewW = getWidth();  viewH = getHeight();
         ballW = viewW/8f; ballH = ballW;
-
-        bmpBg = BitmapFactory.decodeResource(res, R.drawable.bg);                 //抓背景的圖  0,0的位置
+        //抓背景的圖  0,0的位置
+        bmpBg = BitmapFactory.decodeResource(res, R.drawable.bg);
         bmpBg = resizeBitmap(bmpBg, viewW,viewH);
-        bmpBall = BitmapFactory.decodeResource(res, R.drawable.ball);                 //抓球的圖  0,0的位置
+        //抓球的圖  0,0的位置
+        bmpBall = BitmapFactory.decodeResource(res, R.drawable.ball);
         bmpBall = resizeBitmap(bmpBall, ballW,ballH);
 
-        dx = dy = 10;     //球移動的速度
+        //球移動的速度
+        dx = dy = 10;
+
+
         timer.schedule(new RefreshView(), 0, 40);    //畫面0.04秒移動一次
         timer.schedule(new BallTask(), 1000, 100);   //球每0.1秒移動10的速度
         isInit = true;
@@ -108,7 +115,7 @@ public class MyView extends View {
         @Override
         public void run() {
             //invalidate();      //這裡是內部引用
-            postInvalidate();    //因為另外建立一個執行序 所以從外部引用
+            postInvalidate();    //因為另外建立一個執行序 所以從外部引用   重劃
         }
     }
 
@@ -155,7 +162,7 @@ public class MyView extends View {
                 new HashMap<>();
         point.put("x",x); point.put("y",y);
         lines.getLast().add(point);          //最後一條線收集最後的點
-        invalidate();
+        invalidate();                        //重劃
     }
 //    @Override
 //    public void setOnClickListener(OnClickListener l) {
