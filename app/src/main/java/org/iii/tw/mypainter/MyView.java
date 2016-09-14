@@ -1,6 +1,9 @@
 package org.iii.tw.mypainter;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,22 +15,31 @@ import android.view.View;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ResourceBundle;
 
 /**
  * Created by user on 2016/9/13.
  */
 public class MyView extends View {
     private LinkedList<LinkedList<HashMap<String,Float>>> lines;  //這邊是製作一條線   ,之後改多條
+    private Resources res;
 
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
         lines = new LinkedList<>();      //建構式物件
+        res = context.getResources();
 //    setOnClickListener(new MyClick());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        Bitmap bmpBall = BitmapFactory.decodeResource(res,R.drawable.ball);         //抓球的圖  0,0的位置
+        canvas.drawBitmap(bmpBall,0,0,null);
+
+
+
         Paint p = new Paint();
         p.setColor(Color.BLUE);
         p.setStrokeWidth(4);
