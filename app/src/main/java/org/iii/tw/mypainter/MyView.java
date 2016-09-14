@@ -27,7 +27,7 @@ public class MyView extends View {
     private Resources res;
     private boolean isInit;   //這邊基本型別是flase
     private int viewW,viewH;
-    private Bitmap bmpBall;
+    private Bitmap bmpBall, bmpBg;
     private Matrix matrix;
 
     public MyView(Context context, AttributeSet attrs) {
@@ -43,6 +43,8 @@ public class MyView extends View {
         viewW = getWidth();  viewH = getHeight();
         float ballW = viewW/8f ,ballH = ballW;
 
+        bmpBg = BitmapFactory.decodeResource(res, R.drawable.bg);                 //抓背景的圖  0,0的位置
+        bmpBg = resizeBitmap(bmpBg, viewW,viewH);
         bmpBall = BitmapFactory.decodeResource(res, R.drawable.ball);                 //抓球的圖  0,0的位置
         bmpBall = resizeBitmap(bmpBall, ballW,ballH);
 
@@ -51,16 +53,16 @@ public class MyView extends View {
     private Bitmap resizeBitmap(Bitmap src, float newW, float newH){
 
         matrix.reset();
-        matrix.postScale(newW/bmpBall.getWidth(), newH/bmpBall.getHeight());              //新值= 原值*sx  所以sx=新/原
-        bmpBall = Bitmap.createBitmap(bmpBall,0,0,bmpBall.getWidth(),bmpBall.getHeight(),matrix,false);    //抓取整張圖的從00到最後
+        matrix.postScale(newW/src.getWidth(), newH/src.getHeight());              //新值= 原值*sx  所以sx=新/原
+        bmpBall = Bitmap.createBitmap(src,0,0,src.getWidth(),src.getHeight(),matrix,false);    //抓取整張圖的從00到最後
         return bmpBall;
     }
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         if(!isInit)init();
 
+        canvas.drawBitmap(bmpBg,0,0,null);
         canvas.drawBitmap(bmpBall,0,0,null);
 
 
