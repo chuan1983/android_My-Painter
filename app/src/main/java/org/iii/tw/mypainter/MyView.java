@@ -98,8 +98,8 @@ public class MyView extends View {
     private class BallTask extends TimerTask{
         @Override
         public void run() {
-            if(ballX<0 || ballX+ballW>viewW) dx *= -1; //球碰到上下的畫面反彈
-            if(ballY<0 || ballY+ballH>viewH) dx *= -1; //球碰到左右的畫面反彈
+            if(ballX < 0 || ballX + ballW > viewW) dx *= -1; //球碰到上下的畫面反彈
+            if(ballY < 0 || ballY + ballH > viewH) dy *= -1; //球碰到左右的畫面反彈
             ballX += dx; ballY += dy;
         }
     }
