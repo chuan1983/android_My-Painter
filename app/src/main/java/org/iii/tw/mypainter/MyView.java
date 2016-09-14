@@ -17,6 +17,8 @@ import android.view.View;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 
 /**
@@ -29,25 +31,32 @@ public class MyView extends View {
     private int viewW,viewH;
     private Bitmap bmpBall, bmpBg;
     private Matrix matrix;
+    private Timer timer;
+    private float ballX, ballY, ballW, ballH, dx, dy;
 
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
         lines = new LinkedList<>();      //建構式物件
         res = context.getResources();
-
         matrix = new Matrix();          //圖等比例的動作
+        timer = new Timer();
 //    setOnClickListener(new MyClick());
     }
 
+    Timer getTimer(){return timer;}     //控制MyView週期生命
+
     private void init(){
-        viewW = getWidth();  viewH = getHeight();
-        float ballW = viewW/8f ,ballH = ballW;
+        viewW = getWidth();  viewH = getHeight();        //取得view得寬高
+        ballW = viewW/8f; ballH = ballW;
 
         bmpBg = BitmapFactory.decodeResource(res, R.drawable.bg);                 //抓背景的圖  0,0的位置
         bmpBg = resizeBitmap(bmpBg, viewW,viewH);
         bmpBall = BitmapFactory.decodeResource(res, R.drawable.ball);                 //抓球的圖  0,0的位置
         bmpBall = resizeBitmap(bmpBall, ballW,ballH);
 
+        dx = dy = 10;     //球移動的速度
+        timer.schedule(new RefreshView(), 0, 40);    //畫面0.04秒移動一次
+        timer.schedule(new BallTask(), 1000, 100);   //球每0.1秒移動10的速度
         isInit = true;
     }
     private Bitmap resizeBitmap(Bitmap src, float newW, float newH){
@@ -62,8 +71,8 @@ public class MyView extends View {
         super.onDraw(canvas);
         if(!isInit)init();
 
-        canvas.drawBitmap(bmpBg,0,0,null);
-        canvas.drawBitmap(bmpBall,0,0,null);
+        canvas.drawBitmap(bmpBg, 0, 0, null);
+        canvas.drawBitmap(bmpBall, ballX, ballY, null);
 
 
 
@@ -75,6 +84,23 @@ public class MyView extends View {
             canvas.drawLine(line.get(i - 1).get("x"), line.get(i - 1).get("y"),
                     line.get(i).get("x"), line.get(i).get("y"), p);
             }
+        }
+    }
+
+    private class RefreshView extends TimerTask{
+        @Override
+        public void run() {
+            //invalidate();      //這裡是內部引用
+            postInvalidate();    //因為另外建立一個執行序 所以從外部引用
+        }
+    }
+
+    private class BallTask extends TimerTask{
+        @Override
+        public void run() {
+            if(ballX<0 || ballX+ballW>viewW) dx *= -1; //球碰到上下的畫面反彈
+            if(ballY<0 || ballY+ballH>viewH) dx *= -1; //球碰到左右的畫面反彈
+            ballX += dx; ballY += dy;
         }
     }
 //    private class MyClick implements View.OnClickListener{
