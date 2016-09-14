@@ -17,10 +17,11 @@ import java.util.LinkedList;
  * Created by user on 2016/9/13.
  */
 public class MyView extends View {
-    private LinkedList<HashMap<String,Float>> line;  //這邊是製作一條線
+    private LinkedList<LinkedList<HashMap<String,Float>>> lines;  //這邊是製作一條線   ,之後改多條
+
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        line = new LinkedList<>();      //建構式物件
+        lines = new LinkedList<>();      //建構式物件
 //    setOnClickListener(new MyClick());
     }
 
@@ -30,9 +31,11 @@ public class MyView extends View {
         Paint p = new Paint();
         p.setColor(Color.BLUE);
         p.setStrokeWidth(4);
-        for (int i=1; i<line.size(); i++){
-            canvas.drawLine(line.get(i-1).get("x"),line.get(i-1).get("y"),
-                    line.get(i).get("x"),line.get(i).get("y"),p);
+        for(LinkedList<HashMap<String,Float>>line:lines){                //由一改多
+        for (int i=1; i<line.size(); i++) {
+            canvas.drawLine(line.get(i - 1).get("x"), line.get(i - 1).get("y"),
+                    line.get(i).get("x"), line.get(i).get("y"), p);
+            }
         }
     }
 //    private class MyClick implements View.OnClickListener{
@@ -56,17 +59,19 @@ public class MyView extends View {
         return true;
     }
     private void doTouchDown(float x, float y){
-        HashMap<String,Float> point =                //收集點的動作
-                new HashMap<>();
-        point.put("x",x); point.put("y",y);
-        line.add(point);
-        invalidate();
+        LinkedList<HashMap<String,Float>>line =
+                new LinkedList<>();
+        lines.add(line);
+        addPoint(x, y);                        //分到下面
     }
     private void doTouchMove(float x, float y){
-        HashMap<String,Float> point =
+        addPoint(x, y);
+    }
+    private void addPoint(float x, float y){
+        HashMap<String,Float> point =                 //收集點的動作
                 new HashMap<>();
         point.put("x",x); point.put("y",y);
-        line.add(point);
+        lines.getLast().add(point);          //最後一條線收集最後的點
         invalidate();
     }
 //    @Override
