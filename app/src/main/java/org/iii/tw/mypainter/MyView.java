@@ -8,8 +8,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +35,7 @@ public class MyView extends View {
     private Matrix matrix;
     private Timer timer;
     private float ballX, ballY, ballW, ballH, dx, dy;
+    private GestureDetector gd;
 
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,7 +43,23 @@ public class MyView extends View {
         res = context.getResources();
         matrix = new Matrix();          //圖等比例的動作
         timer = new Timer();
+        gd = new GestureDetector(context,new MyGDListener());
 //    setOnClickListener(new MyClick());
+    }
+
+    private class MyGDListener extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onDown(MotionEvent e) {
+//            Log.d("brad","onDown");
+//            return super.onDown(e);
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.d("brad","onFling:"+ velocityX + "x" + velocityY);
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
     }
 
     Timer getTimer(){return timer;}     //控制MyView週期生命
@@ -70,11 +89,9 @@ public class MyView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if(!isInit)init();
-
+        //這邊是架構畫面  底層是bmpBg 中層是bmpBall 外層是畫線
         canvas.drawBitmap(bmpBg, 0, 0, null);
         canvas.drawBitmap(bmpBall, ballX, ballY, null);
-
-
 
         Paint p = new Paint();
         p.setColor(Color.BLUE);
@@ -121,7 +138,8 @@ public class MyView extends View {
             doTouchMove(ex,ey);
         }
 //        invalidate();
-        return true;
+//        return true;
+        return gd.onTouchEvent(event);
     }
     private void doTouchDown(float x, float y){
         LinkedList<HashMap<String,Float>>line =

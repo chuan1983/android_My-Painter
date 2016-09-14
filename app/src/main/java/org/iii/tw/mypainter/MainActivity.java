@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
-    myView.getTimer().cancel();
+    myView.getTimer().cancel();   //這邊執行
         super.finish();
     }
 }
